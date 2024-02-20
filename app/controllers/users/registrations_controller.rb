@@ -12,9 +12,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  def create
+    build_resource(sign_up_params)
+    resource.save
+    sign_up(resource_name, resource) if resource.persisted?
+    respond_with resource
+  end
 
   # GET /resource/edit
   # def edit
@@ -62,6 +65,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   #   super(resource)
   # end
   private
+
+  def sign_up_params
+    params.require(:user).permit(:email, :password, :password_confirmation, :username)
+  end
 
   def respond_with(resource, _opts = {})
     if request.method == "POST" && resource.persisted?

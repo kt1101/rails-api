@@ -5,5 +5,7 @@ class User < ApplicationRecord
 
   devise :database_authenticatable, :registerable, :recoverable, :rememberable,
          :validatable, :jwt_authenticatable, jwt_revocation_strategy: self
-  
+  has_one_attached :avatar
+
+  has_many :jobs, dependent: :destroy
 end
