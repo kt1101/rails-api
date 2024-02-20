@@ -6,6 +6,9 @@ class AuthController < ApplicationController
     @user = User.find_by!(email: login_params[:email])
     if @user.authenticate(login_params[:password])
       token = encode_token(@user.id)
+      user_token = UserToken.create!(token: token, user_id: @user.id)
+      user_token.save
+      response.headers['Authorization'] = "Bearer #{token}"
       render json: {
         user: UserSerializer.new(@user).serializable_hash,
         token: token
@@ -16,8 +19,11 @@ class AuthController < ApplicationController
   end
 
   def logout
-    destroy_token
-    render json: { message: 'User logged out' }, status: :ok
+    if logged_in_token.destroy
+      render json: { message: 'User logged out' }, status: :ok
+    else
+      render json: { message: 'User not logged out' }, status: :unprocessable_entity
+    end
   end
 
   private

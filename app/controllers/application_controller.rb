@@ -10,24 +10,19 @@ class ApplicationController < ActionController::API
   end
 
   def decode_token
-    header = request.headers['Authorization']
-    if header
-      token = header.split(' ')[1]
-      begin
-        JWT.decode(token, 'my_secret', true, algorithm: 'HS256')
-      rescue JWT::DecodeError
-        nil
-      end
+    return if !logged_in_token.present?
+    begin
+      JWT.decode(logged_in_token.token, 'my_secret', true, algorithm: 'HS256')
+    rescue JWT::DecodeError
+      nil
     end
   end
 
-  def destroy_token
-    if current_user
-      @user = nil
-      decode_token[0]["exp"] = Time.now.to_i
-    else
-      render json: { message: 'No user logged in' }, status: :unauthorized
-    end
+  def logged_in_token
+    header = request.headers['Authorization']
+    return if !header
+    token = header.split(' ')[1]
+    UserToken.find_by(token: token)
   end
 
   def current_user
@@ -38,7 +33,6 @@ class ApplicationController < ActionController::API
   end
 
   def authorized
-    debugger
     render json: { message: 'Please log in' }, status: :unauthorized unless current_user
   end
 

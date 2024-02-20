@@ -5,9 +5,7 @@ class UsersController < ApplicationController
 
   # GET /users
   def index
-    @users = User.all
-
-    render json: UserSerializer.new(@users).serializable_hash, status: :ok
+    render json: UserSerializer.new(current_user).serializable_hash, status: :ok
   end
 
   # GET /users/1
@@ -20,10 +18,8 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     @token = encode_token(user_id: @user.id)
     if @user.save
-      debugger
       render json: {
-        user: UserSerializer.new(@user).serializable_hash,
-        token: @token
+        user: UserSerializer.new(@user).serializable_hash
       }, status: :created
     else
       render json: @user.errors, status: :unprocessable_entity
@@ -52,7 +48,7 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:email, :password, :password_confirmation)
+      params.require(:user).permit(:email, :password, :password_confirmation, :username)
     end
 
     def handle_invalid_record(invalid)
