@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   resources :jobs
-  resources :users
+  resources :users do
+    put :update_avatar, on: :member
+  end
+
 
   delete "/auth/logout", to: "auth#logout"
   post "/auth/login", to: "auth#login"

@@ -40,6 +40,17 @@ class UsersController < ApplicationController
     @user.destroy
   end
 
+  def update_avatar
+    if current_user.image.attach(params[:file_path])
+      current_user.update(avatar: url_for(current_user.image))
+      if current_user.save
+        render json: { user: UserSerializer.new(current_user).serializable_hash }, status: :ok
+      end
+    else
+      render json: { errors: current_user.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
