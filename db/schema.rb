@@ -10,14 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_20_081939) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_20_105646) do
+  create_table "jobs", force: :cascade do |t|
+    t.string "title"
+    t.string "share_link"
+    t.decimal "salary_from"
+    t.decimal "salary_to"
+    t.integer "status", default: 0
+    t.datetime "published_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_jobs_on_user_id"
+  end
+
   create_table "user_tokens", force: :cascade do |t|
     t.string "token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "users_id"
-    t.string "user_id"
-    t.index ["users_id"], name: "index_user_tokens_on_users_id"
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_user_tokens_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -29,5 +41,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_20_081939) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "user_tokens", "users", column: "users_id"
+  add_foreign_key "jobs", "users"
+  add_foreign_key "user_tokens", "users"
 end
