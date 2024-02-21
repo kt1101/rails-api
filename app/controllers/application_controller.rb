@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::API
+  include Pundit::Authorization
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   before_action :authorized
 
   def encode_token(id)
@@ -34,6 +36,13 @@ class ApplicationController < ActionController::API
 
   def authorized
     render json: { message: 'Please log in' }, status: :unauthorized unless current_user
+  end
+
+
+  private
+
+  def user_not_authorized
+    render json: { message: 'You are not authorized to perform this action.' }, status: :unauthorized
   end
 
 end
