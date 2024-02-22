@@ -1,41 +1,29 @@
 class JobsController < ApplicationController
-  before_action :set_job, only: %i[ show update destroy ]
-  skip_before_action :authorized, only: %i[ show ]
+  before_action :set_job, only: %i[ update destroy share_link ]
+  skip_before_action :authenticated, only: %i[ share_link ]
   # GET /jobs
   def index
     @jobs = current_user.jobs
-    render json: @jobs, status: :ok
-  end
-
-  # GET /jobs/1
-  def show
-    authorize @job
-    render json: @job
+    authorize @jobs
+    render json: JobSerializer.new(@jobs).serializable_hash, status: :ok
   end
 
   # POST /jobs
-  def create
-    @job = current_user.jobs.build(job_params)
-    if @job.save
-      render json: @job, status: :created
-    else
-      render json: { errors: @job.errors.full_messages }, status: :unprocessable_entity
-    end
-  end
+  # def create
+  #   @job = current_user.jobs.build(job_params)
+  #   if @job.save
+  #     render json: JobSerializer.new(@job).serializable_hash, status: :created
+  #   else
+  #     render json: { errors: @job.errors.full_messages }, status: :unprocessable_entity
+  #   end
+  # end
 
   # PATCH/PUT /jobs/1
   def update
     authorize @job
     @job = current_user.jobs.find(params[:id])
-    if @job.draft? && update_params[:status] == "published"
-      @job.set_published_date
-      @job.set_share_link
-    elsif @job.published? && update_params[:status] == "draft"
-      @job.published_date = nil
-      @job.share_link = nil
-    end
-    if @job.update(update_params)
-      render json: @job, status: :ok
+    if @job.update(job_params)
+      render json: JobSerializer.new(@job).serializable_hash, status: :ok
     else
       render json: { errors: @job.errors.full_messages }, status: :unprocessable_entity
     end
@@ -49,6 +37,15 @@ class JobsController < ApplicationController
     render json: { message: "Job deleted successfully." }, status: :ok
   end
 
+  # GET /jobs/1/share_link
+  def share_link
+    if @job.published?
+      render json: { job: @job }, status: :ok
+    else
+      render json: { message: "Job not published." }, status: :unprocessable_entity
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_job
@@ -57,10 +54,6 @@ class JobsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def job_params
-      params.require(:job).permit(:title, :salary_from, :salary_to)
-    end
-
-    def update_params
       params.require(:job).permit(:title, :salary_from, :salary_to, :status)
     end
 end

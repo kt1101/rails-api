@@ -3,11 +3,11 @@ class User < ApplicationRecord
   has_many :user_tokens, dependent: :destroy
   has_many :jobs, dependent: :destroy
 
-  # validates :email, presence: true, uniqueness: true
-  # validates :password, presence: true
-  # validates :password_confirmation, presence: true
-  # validates :username, presence: true
+  validates :email, presence: true, uniqueness: true
+  validates :password, presence: true, on: :create
+  validates :password_confirmation, presence: true, on: :create
+  validates :username, presence: true
 
-  has_one_attached :image
+  has_one_attached :avatar
 
 end
