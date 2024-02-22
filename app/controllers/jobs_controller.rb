@@ -1,6 +1,7 @@
 class JobsController < ApplicationController
   before_action :set_job, only: %i[ update destroy share_link ]
   skip_before_action :authenticated, only: %i[ share_link ]
+
   # GET /jobs
   def index
     @jobs = current_user.jobs
@@ -9,14 +10,14 @@ class JobsController < ApplicationController
   end
 
   # POST /jobs
-  # def create
-  #   @job = current_user.jobs.build(job_params)
-  #   if @job.save
-  #     render json: JobSerializer.new(@job).serializable_hash, status: :created
-  #   else
-  #     render json: { errors: @job.errors.full_messages }, status: :unprocessable_entity
-  #   end
-  # end
+  def create
+    @job = current_user.jobs.build(job_params)
+    if @job.save
+      render json: JobSerializer.new(@job).serializable_hash, status: :created
+    else
+      render json: { errors: @job.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
 
   # PATCH/PUT /jobs/1
   def update
