@@ -56,3 +56,7 @@ gem 'pundit'
 
 # Build JSON API with JSON:API Serialization Library [https://github.com/jsonapi-serializer/jsonapi-serializer]
 gem "jsonapi-serializer"
+
+# Use Clockwork for scheduling background jobs
+gem 'clockwork'
+gem 'foreman'
