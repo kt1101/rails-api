@@ -1,6 +1,18 @@
 class AuthController < ApplicationController
-  skip_before_action :authorized, only: [ :login ]
+  skip_before_action :authenticated, except: [ :logout ]
   rescue_from ActiveRecord::RecordInvalid, with: :handle_invalid_record
+
+  def signup
+    @user = User.new(user_params)
+    @token = encode_token(user_id: @user.id)
+    if @user.save
+      render json: {
+        user: UserSerializer.new(@user).serializable_hash
+      }, status: :created
+    else
+      render json: @user.errors, status: :unprocessable_entity
+    end
+  end
 
   def login
     @user = User.find_by!(email: login_params[:email])
@@ -28,9 +40,14 @@ class AuthController < ApplicationController
 
   private
 
+  def user_params
+    params.require(:user).permit(:email, :password, :password_confirmation, :username)
+  end
+
   def login_params
     params.require(:user).permit(:email, :password)
   end
+
   def handle_invalid_record(e)
     render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
   end

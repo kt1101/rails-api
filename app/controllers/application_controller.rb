@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::API
   include Pundit::Authorization
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
-  before_action :authorized
+  before_action :authenticated
 
   def encode_token(id)
     payload = {
@@ -34,12 +34,11 @@ class ApplicationController < ActionController::API
     end
   end
 
-  def authorized
+  private
+
+  def authenticated
     render json: { message: 'Please log in' }, status: :unauthorized unless current_user
   end
-
-
-  private
 
   def user_not_authorized
     render json: { message: 'You are not authorized to perform this action.' }, status: :unauthorized

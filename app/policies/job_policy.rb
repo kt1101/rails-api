@@ -6,8 +6,8 @@ class JobPolicy < ApplicationPolicy
     @job = job
   end
 
-  def show?
-    (user.present? && user.id == job.user_id) || job.status == "published"
+  def index?
+    job.where(user_id: user.id).count == job.count
   end
 
   def update?
