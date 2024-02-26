@@ -44,6 +44,9 @@ end
 group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+
+  # Use Letter Opener Web for previewing mail in the browser
+  gem "letter_opener_web"
 end
 
 # Use JWT gem for authentication

@@ -31,6 +31,7 @@ class Job < ApplicationRecord
     if self.published? && self.status_changed?
       set_published_date
       set_share_link
+      FeedbackMailer.feedback_mailer(self).deliver_later
     elsif self.draft? && self.status_changed?
       self.published_date = nil
       self.share_link = nil
@@ -43,5 +44,5 @@ class Job < ApplicationRecord
       errors.add(:salary_to, "must be greater than salary from")
     end
   end
-  
+
 end
