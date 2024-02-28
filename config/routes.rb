@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :locations
   resources :users, only: [ :show, :update ]
   resources :jobs, except: [ :show ] do
     member do

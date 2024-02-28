@@ -5,7 +5,7 @@ class JobsController < ApplicationController
   # GET /jobs
   def index
     @jobs = current_user.jobs
-    authorize @jobs
+    authorize(@jobs)
     render json: JobSerializer.new(@jobs).serializable_hash, status: :ok
   end
 
@@ -21,21 +21,23 @@ class JobsController < ApplicationController
 
   # PATCH/PUT /jobs/1
   def update
-    authorize @job
-    @job = current_user.jobs.find(params[:id])
-    if @job.update(job_params)
+    authorize(@job)
+    @update_job = UpdateJobForm.new(job: @job, params: params[:job] || {})
+    if @update_job.update
       render json: JobSerializer.new(@job).serializable_hash, status: :ok
     else
-      render json: { errors: @job.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: @update_job.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   # DELETE /jobs/1
   def destroy
-    authorize @job
-    @job = current_user.jobs.find(params[:id])
-    @job.destroy
-    render json: { message: "Job deleted successfully." }, status: :ok
+    authorize(@job)
+    if @job.destroy
+      render json: { message: "Job deleted successfully." }, status: :ok
+    else
+      render json: { errors: @job.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   # GET /jobs/1/share_link
