@@ -4,13 +4,13 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
-    authorize @user
+    authorize(@user)
     render json: { user: UserSerializer.new(@user).serializable_hash }, status: :ok
   end
 
   # PATCH/PUT /users/1
   def update
-    authorize @user
+    authorize(@user)
     if @user.update(user_params)
       render json: UserSerializer.new(@user).serializable_hash, status: :ok
     else

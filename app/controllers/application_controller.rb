@@ -11,15 +11,6 @@ class ApplicationController < ActionController::API
     JWT.encode(payload, 'my_secret')
   end
 
-  def decode_token
-    return if !logged_in_token.present?
-    begin
-      JWT.decode(logged_in_token.token, 'my_secret', true, algorithm: 'HS256')
-    rescue JWT::DecodeError
-      nil
-    end
-  end
-
   def logged_in_token
     header = request.headers['Authorization']
     return if !header
@@ -36,12 +27,21 @@ class ApplicationController < ActionController::API
 
   private
 
-  def authenticated
-    render json: { message: 'Please log in' }, status: :unauthorized unless current_user
-  end
+    def decode_token
+      return if !logged_in_token.present?
+      begin
+        JWT.decode(logged_in_token.token, 'my_secret', true, algorithm: 'HS256')
+      rescue JWT::DecodeError
+        nil
+      end
+    end
 
-  def user_not_authorized
-    render json: { message: 'You are not authorized to perform this action.' }, status: :unauthorized
-  end
+    def authenticated
+      render json: { message: 'Please log in' }, status: :unauthorized unless current_user
+    end
+
+    def user_not_authorized
+      render json: { message: 'You are not authorized to perform this action.' }, status: :unauthorized
+    end
 
 end

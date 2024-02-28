@@ -40,15 +40,15 @@ class AuthController < ApplicationController
 
   private
 
-  def user_params
-    params.require(:user).permit(:email, :password, :password_confirmation, :username)
-  end
+    def user_params
+      params.require(:user).permit(:email, :password, :password_confirmation, :username)
+    end
 
-  def login_params
-    params.require(:user).permit(:email, :password)
-  end
+    def login_params
+      params.require(:user).permit(:email, :password)
+    end
 
-  def handle_invalid_record(e)
-    render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
-  end
+    def handle_invalid_record(e)
+      render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
+    end
 end
