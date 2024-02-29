@@ -3,6 +3,7 @@ class Job < ApplicationRecord
 
   has_one :job_location
   has_one :location, through: :job_location
+  has_many :applicants
 
   validates :title, presence: true
   validate :check_salary_range
@@ -37,7 +38,7 @@ class Job < ApplicationRecord
       if self.published? && self.status_changed?
         set_published_date
         set_share_link
-        FeedbackMailer.feedback_mailer(self).deliver_later
+        PublishedJobMailer.published_job_mailer(self).deliver_later
       elsif self.draft? && self.status_changed?
         self.published_date = nil
         self.share_link = nil
