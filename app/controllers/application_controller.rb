@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::API
   include Pundit::Authorization
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
@@ -13,35 +15,36 @@ class ApplicationController < ActionController::API
 
   def logged_in_token
     header = request.headers['Authorization']
-    return if !header
+    return unless header
+
     token = header.split(' ')[1]
-    UserToken.find_by(token: token)
+    UserToken.find_by(token:)
   end
 
   def current_user
-    if decode_token
-      user_id = decode_token[0]['user_id']
-      @user = User.find(user_id)
-    end
+    return unless decode_token
+
+    user_id = decode_token[0]['user_id']
+    @user = User.find(user_id)
   end
 
   private
 
-    def decode_token
-      return if !logged_in_token.present?
-      begin
-        JWT.decode(logged_in_token.token, 'my_secret', true, algorithm: 'HS256')
-      rescue JWT::DecodeError
-        nil
-      end
-    end
+  def decode_token
+    return unless logged_in_token.present?
 
-    def authenticated
-      render json: { message: 'Please log in' }, status: :unauthorized unless current_user
+    begin
+      JWT.decode(logged_in_token.token, 'my_secret', true, algorithm: 'HS256')
+    rescue JWT::DecodeError
+      nil
     end
+  end
 
-    def user_not_authorized
-      render json: { message: 'You are not authorized to perform this action.' }, status: :unauthorized
-    end
+  def authenticated
+    render json: { message: 'Please log in' }, status: :unauthorized unless current_user
+  end
 
+  def user_not_authorized
+    render json: { message: 'You are not authorized to perform this action.' }, status: :unauthorized
+  end
 end

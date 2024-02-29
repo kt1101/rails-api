@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class JobSerializer < ActiveModel::Serializer
   include JSONAPI::Serializer
 

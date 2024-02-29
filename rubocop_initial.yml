@@ -1,0 +1,87 @@
+Layout/EmptyLines:
+  Exclude:
+    - 'config/environments/development.rb'
+
+Layout/ExtraSpacing:
+  Exclude:
+    - 'config/environments/production.rb'
+
+Layout/SpaceAroundOperators:
+  Exclude:
+    - 'config/environments/production.rb'
+
+Layout/SpaceInsideArrayLiteralBrackets:
+  Exclude:
+    - 'config/environments/production.rb'
+
+Metrics:
+  Exclude:
+    - 'db/*/*'
+
+Layout/LineLength:
+  Max: 100
+
+Metrics/AbcSize:
+  Max: 60
+
+Metrics/ClassLength:
+  Max: 500
+
+Metrics/ModuleLength:
+  Max: 500
+
+Metrics/CyclomaticComplexity:
+  Max: 20
+
+Metrics/MethodLength:
+  Max: 40
+
+Metrics/PerceivedComplexity:
+  Max: 20
+
+Metrics/BlockLength:
+  Max: 150
+  Exclude:
+    - 'config/*/*'
+
+Rails/FilePath:
+  Exclude:
+    - 'config/environments/development.rb'
+    - 'config/application.rb'
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/GlobalStdStream:
+  Exclude:
+    - 'config/environments/production.rb'
+
+Style/RedundantFetchBlock:
+  Exclude:
+    - 'config/puma.rb'
+
+Style/StringLiterals:
+  Exclude:
+    - 'config/application.rb'
+    - 'config/environments/production.rb'
+    - 'config/puma.rb'
+    - 'config/spring.rb'
+    - 'spec/rails_helper.rb'
+
+Style/SymbolArray:
+  EnforcedStyle: brackets
+
+Security/MarshalLoad:
+  Enabled: false
+
+Lint/MissingSuper:
+  Enabled: false
+
+Rails/HasManyOrHasOneDependent:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Exclude:
+    - 'falcon.rb'
+Rails/SkipsModelValidations:
+  Enabled: false

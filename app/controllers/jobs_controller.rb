@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class JobsController < ApplicationController
-  before_action :set_job, only: %i[ update destroy share_link ]
-  skip_before_action :authenticated, only: %i[ share_link ]
+  before_action :set_job, only: %i[update destroy share_link]
+  skip_before_action :authenticated, only: %i[share_link]
 
   # GET /jobs
   def index
@@ -34,7 +36,7 @@ class JobsController < ApplicationController
   def destroy
     authorize(@job)
     if @job.destroy
-      render json: { message: "Job deleted successfully." }, status: :ok
+      render json: { message: 'Job deleted successfully.' }, status: :ok
     else
       render json: { errors: @job.errors.full_messages }, status: :unprocessable_entity
     end
@@ -45,18 +47,19 @@ class JobsController < ApplicationController
     if @job.published?
       render json: { job: @job }, status: :ok
     else
-      render json: { message: "Job not published." }, status: :unprocessable_entity
+      render json: { message: 'Job not published.' }, status: :unprocessable_entity
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_job
-      @job = Job.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def job_params
-      params.require(:job).permit(:title, :salary_from, :salary_to, :status)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_job
+    @job = Job.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def job_params
+    params.require(:job).permit(:title, :salary_from, :salary_to, :status)
+  end
 end

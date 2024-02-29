@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Job < ApplicationRecord
   belongs_to :user
 
@@ -34,26 +36,26 @@ class Job < ApplicationRecord
 
   private
 
-    def update_status
-      if self.published? && self.status_changed?
-        set_published_date
-        set_share_link
-        PublishedJobMailer.published_job_mailer(self).deliver_later
-      elsif self.draft? && self.status_changed?
-        self.published_date = nil
-        self.share_link = nil
-      end
+  def update_status
+    if published? && status_changed?
+      set_published_date
+      set_share_link
+      PublishedJobMailer.published_job_mailer(self).deliver_later
+    elsif draft? && status_changed?
+      self.published_date = nil
+      self.share_link = nil
     end
+  end
 
-    def check_salary_range
-      return unless salary_from.present? && salary_to.present?
-      if salary_from >= salary_to
-        errors.add(:salary_to, "must be greater than salary from")
-      end
-    end
+  def check_salary_range
+    return unless salary_from.present? && salary_to.present?
 
-    def delete_associated_job_location
-      self.job_location.destroy if self.job_location.present?
-    end
+    return unless salary_from >= salary_to
 
+    errors.add(:salary_to, 'must be greater than salary from')
+  end
+
+  def delete_associated_job_location
+    job_location.destroy if job_location.present?
+  end
 end
