@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_27_025158) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_28_081045) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -39,6 +39,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_27_025158) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "applicants", force: :cascade do |t|
+    t.integer "status", default: 0
+    t.integer "job_id", null: false
+    t.integer "profile_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["job_id"], name: "index_applicants_on_job_id"
+    t.index ["profile_id"], name: "index_applicants_on_profile_id"
+  end
+
   create_table "job_locations", force: :cascade do |t|
     t.integer "job_id"
     t.integer "location_id"
@@ -65,6 +75,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_27_025158) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "profiles", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "user_tokens", force: :cascade do |t|
     t.string "token"
     t.datetime "created_at", null: false
@@ -84,6 +101,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_27_025158) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "applicants", "jobs"
+  add_foreign_key "applicants", "profiles"
   add_foreign_key "jobs", "users"
   add_foreign_key "user_tokens", "users"
 end
