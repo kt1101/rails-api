@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class UsersController < ApplicationController
   before_action :set_user
   rescue_from ActiveRecord::RecordInvalid, with: :handle_invalid_record

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ApplicationController < ActionController::API
   include Pundit::Authorization
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
@@ -17,7 +15,7 @@ class ApplicationController < ActionController::API
     header = request.headers['Authorization']
     return unless header
 
-    token = header.split(' ')[1]
+    token = header.split[1]
     UserToken.find_by(token:)
   end
 
@@ -31,7 +29,7 @@ class ApplicationController < ActionController::API
   private
 
   def decode_token
-    return unless logged_in_token.present?
+    return if logged_in_token.blank?
 
     begin
       JWT.decode(logged_in_token.token, 'my_secret', true, algorithm: 'HS256')
@@ -45,6 +43,7 @@ class ApplicationController < ActionController::API
   end
 
   def user_not_authorized
-    render json: { message: 'You are not authorized to perform this action.' }, status: :unauthorized
+    render json: { message: 'You are not authorized to perform this action.' },
+           status: :unauthorized
   end
 end

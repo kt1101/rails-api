@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class UpdateJobForm
   include ActiveModel::Model
 
@@ -31,7 +29,7 @@ class UpdateJobForm
   end
 
   def update_location(location_params = {})
-    if job.location.present? && !Location.pluck(:address).include?(location_params[:address])
+    if job.location.present? && Location.pluck(:address).exclude?(location_params[:address])
       job.location.update!(location_params)
     else
       job.location = Location.find_or_create_by!(location_params)

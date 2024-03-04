@@ -1,19 +1,12 @@
-# frozen_string_literal: true
-
 class UserPolicy < ApplicationPolicy
-  attr_reader :current_user, :user
-
-  def initialize(current_user, user)
-    @current_user = current_user
-    @user = user
-  end
-
+  # @user is the current_user
+  # @record is the user we are authorizing against
   def show?
-    @current_user == @user
+    @user == @record
   end
 
   def update?
-    @current_user == @user
+    @user == @record
   end
 
   class Scope < Scope

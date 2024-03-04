@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class Job < ApplicationRecord
   belongs_to :user
 
@@ -8,6 +6,7 @@ class Job < ApplicationRecord
   has_many :applicants
 
   validates :title, presence: true
+  validates :status, presence: true
   validate :check_salary_range
 
   before_update :update_status

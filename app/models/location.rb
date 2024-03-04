@@ -1,10 +1,8 @@
-# frozen_string_literal: true
-
 class Location < ApplicationRecord
   has_many :job_locations
   has_many :jobs, through: :job_locations
 
-  validates :address, presence: true, uniqueness: true
+  validates :address, presence: true
   before_destroy :delete_associated_job_location
 
   private

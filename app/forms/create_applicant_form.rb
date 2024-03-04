@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class CreateApplicantForm
   include ActiveModel::Model
 
@@ -18,7 +16,10 @@ class CreateApplicantForm
   def save
     return false unless valid?
 
-    if Job.find(@applicant_param[:job_id]).status == 'draft'
+    if @applicant_param[:job_id].blank?
+      errors.add(:error, 'Job id is required.')
+      false
+    elsif Job.find(@applicant_param[:job_id]).status == 'draft'
       errors.add(:error, 'Job is not published.')
       false
     else
@@ -34,6 +35,9 @@ class CreateApplicantForm
     elsif @profile_param[:email].present?
       profile = find_or_create_profile(@profile_param)
       Applicant.create!(applicant_param.merge(profile_id: profile.id))
+    else
+      errors.add(:error, 'Profile email is required.')
+      false
     end
   end
 

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'test_helper'
 
 class ApplicantsControllerTest < ActionDispatch::IntegrationTest
@@ -14,7 +12,13 @@ class ApplicantsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should create applicant' do
     assert_difference('Applicant.count') do
-      post applicants_url, params: { applicant: { integer: @applicant.integer, status: @applicant.status } }, as: :json
+      post applicants_url,
+           params: {
+             applicant: {
+               integer: @applicant.integer,
+               status: @applicant.status
+             }
+           }, as: :json
     end
 
     assert_response :created
@@ -26,8 +30,12 @@ class ApplicantsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should update applicant' do
-    patch applicant_url(@applicant), params: { applicant: { integer: @applicant.integer, status: @applicant.status } },
-                                     as: :json
+    patch applicant_url(@applicant), params: {
+      applicant: {
+        integer: @applicant.integer,
+        status: @applicant.status
+      }
+    }, as: :json
     assert_response :success
   end
 

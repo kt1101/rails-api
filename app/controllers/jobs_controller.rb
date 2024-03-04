@@ -1,8 +1,6 @@
-# frozen_string_literal: true
-
 class JobsController < ApplicationController
-  before_action :set_job, only: %i[update destroy share_link]
-  skip_before_action :authenticated, only: %i[share_link]
+  before_action :set_job, only: [:update, :destroy, :share_link]
+  skip_before_action :authenticated, only: [:share_link]
 
   # GET /jobs
   def index

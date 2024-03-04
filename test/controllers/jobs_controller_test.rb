@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'test_helper'
 
 class JobsControllerTest < ActionDispatch::IntegrationTest
@@ -15,7 +13,17 @@ class JobsControllerTest < ActionDispatch::IntegrationTest
   test 'should create job' do
     assert_difference('Job.count') do
       post jobs_url,
-           params: { job: { published_date: @job.published_date, salary_from: @job.salary_from, salary_to: @job.salary_to, share_link: @job.share_link, status: @job.status, title: @job.title, user_id: @job.user_id } }, as: :json
+           params: {
+             job: {
+               published_date: @job.published_date,
+               salary_from: @job.salary_from,
+               salary_to: @job.salary_to,
+               share_link: @job.share_link,
+               status: @job.status,
+               title: @job.title,
+               user_id: @job.user_id
+             }
+           }, as: :json
     end
 
     assert_response :created
@@ -28,7 +36,17 @@ class JobsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should update job' do
     patch job_url(@job),
-          params: { job: { published_date: @job.published_date, salary_from: @job.salary_from, salary_to: @job.salary_to, share_link: @job.share_link, status: @job.status, title: @job.title, user_id: @job.user_id } }, as: :json
+          params: {
+            job: {
+              published_date: @job.published_date,
+              salary_from: @job.salary_from,
+              salary_to: @job.salary_to,
+              share_link: @job.share_link,
+              status: @job.status,
+              title: @job.title,
+              user_id: @job.user_id
+            }
+          }, as: :json
     assert_response :success
   end
 

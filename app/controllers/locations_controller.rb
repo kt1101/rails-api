@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 class LocationsController < ApplicationController
-  before_action :set_location, only: %i[show update destroy]
+  before_action :set_location, only: [:show, :update, :destroy]
 
   # GET /locations
   def index

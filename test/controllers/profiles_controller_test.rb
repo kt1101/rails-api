@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'test_helper'
 
 class ProfilesControllerTest < ActionDispatch::IntegrationTest
@@ -14,7 +12,8 @@ class ProfilesControllerTest < ActionDispatch::IntegrationTest
 
   test 'should create profile' do
     assert_difference('Profile.count') do
-      post profiles_url, params: { profile: { email: @profile.email, name: @profile.name } }, as: :json
+      post profiles_url, params: { profile: { email: @profile.email, name: @profile.name } },
+                         as: :json
     end
 
     assert_response :created
@@ -26,7 +25,8 @@ class ProfilesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should update profile' do
-    patch profile_url(@profile), params: { profile: { email: @profile.email, name: @profile.name } }, as: :json
+    patch profile_url(@profile),
+          params: { profile: { email: @profile.email, name: @profile.name } }, as: :json
     assert_response :success
   end
 

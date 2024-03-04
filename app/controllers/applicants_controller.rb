@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 class ApplicantsController < ApplicationController
-  before_action :set_applicant, only: %i[show update destroy]
+  before_action :set_applicant, only: [:update]
   skip_before_action :authenticated, only: [:create]
 
   # GET /applicants

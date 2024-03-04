@@ -1,9 +1,7 @@
-# frozen_string_literal: true
-
 Rails.application.routes.draw do
-  resources :applicants, only: %i[index create update]
+  resources :applicants, only: [:index, :create, :update]
   resources :locations
-  resources :users, only: %i[show update]
+  resources :users, only: [:show, :update]
   resources :jobs, except: [:show] do
     member do
       get :share_link, to: 'jobs#share_link'
