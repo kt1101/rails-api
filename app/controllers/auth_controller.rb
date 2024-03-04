@@ -1,5 +1,6 @@
 class AuthController < ApplicationController
-  skip_before_action :authenticated, except: [ :logout ]
+  skip_before_action :authenticated, except: [:logout]
+  before_action :find_user, only: [:login]
   rescue_from ActiveRecord::RecordInvalid, with: :handle_invalid_record
 
   def signup
@@ -15,15 +16,13 @@ class AuthController < ApplicationController
   end
 
   def login
-    @user = User.find_by!(email: login_params[:email])
     if @user.authenticate(login_params[:password])
       token = encode_token(@user.id)
-      user_token = UserToken.create!(token: token, user_id: @user.id)
-      user_token.save
+      UserToken.create!(token:, user_id: @user.id)
       response.headers['Authorization'] = "Bearer #{token}"
       render json: {
         user: UserSerializer.new(@user).serializable_hash,
-        token: token
+        token:
       }, status: :accepted
     else
       render json: { message: 'Invalid email or password' }, status: :unauthorized
@@ -40,15 +39,19 @@ class AuthController < ApplicationController
 
   private
 
-    def user_params
-      params.require(:user).permit(:email, :password, :password_confirmation, :username)
-    end
+  def user_params
+    params.require(:user).permit(:email, :password, :password_confirmation, :username)
+  end
 
-    def login_params
-      params.require(:user).permit(:email, :password)
-    end
+  def login_params
+    params.require(:user).permit(:email, :password)
+  end
 
-    def handle_invalid_record(e)
-      render json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity
-    end
+  def handle_invalid_record(error)
+    render json: { errors: error.record.errors.full_messages }, status: :unprocessable_entity
+  end
+
+  def find_user
+    @user = User.find_by!(email: login_params[:email])
+  end
 end

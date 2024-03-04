@@ -1,21 +1,16 @@
 class JobPolicy < ApplicationPolicy
-  attr_reader :user, :job
-
-  def initialize(user, job)
-    @user = user
-    @job = job
-  end
-
+  # @user is the current_user
+  # @record is the job we are authorizing against
   def index?
-    job.where(user_id: user.id).count == job.count
+    @user.jobs.pluck(:id).uniq == @record.pluck(:id).uniq
   end
 
   def update?
-    user.id == job.user_id
+    @user.id == @record.user_id
   end
 
   def destroy?
-    user.id == job.user_id
+    @user.id == @record.user_id
   end
 
   class Scope < Scope

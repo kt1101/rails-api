@@ -1,0 +1,15 @@
+inherit_from: .rubocop_initial.yml
+
+require:
+  - rubocop-rails
+  # - rubocop-graphql
+
+AllCops:
+  TargetRubyVersion: 3.2
+  NewCops: enable
+
+Rails:
+  Enabled: true
+
+Style/Documentation:
+  Enabled: false

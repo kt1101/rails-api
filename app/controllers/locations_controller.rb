@@ -1,5 +1,5 @@
 class LocationsController < ApplicationController
-  before_action :set_location, only: %i[ show update destroy ]
+  before_action :set_location, only: [:show, :update, :destroy]
 
   # GET /locations
   def index
@@ -36,20 +36,21 @@ class LocationsController < ApplicationController
   # DELETE /locations/1
   def destroy
     if @location.destroy
-      render json: { message: "Location deleted successfully." }, status: :ok
+      render json: { message: 'Location deleted successfully.' }, status: :ok
     else
       render json: { errors: @location.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_location
-      @location = Location.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def location_params
-      params.require(:location).permit(:address)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_location
+    @location = Location.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def location_params
+    params.require(:location).permit(:address)
+  end
 end

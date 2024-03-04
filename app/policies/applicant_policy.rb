@@ -1,17 +1,11 @@
 class ApplicantPolicy < ApplicationPolicy
-
-  attr_reader :current_user
-
-  def initialize(current_user, applicant)
-    @current_user = current_user
-    @applicant = applicant
-  end
-
+  # @user is the user
+  # @record is the applicant we are authorizing against
   def index?
-    @current_user.id == Job.where(id: @applicant.pluck(:job_id).uniq).pluck(:user_id).uniq[0]
-  end
-  def update?
-    @current_user == @applicant.job.user
+    @user.id == Job.where(id: @record.pluck(:job_id).uniq).pluck(:user_id).uniq[0]
   end
 
+  def update?
+    @user == @record.job.user
+  end
 end
