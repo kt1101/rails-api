@@ -2,6 +2,7 @@ class CreateApplicantForm
   include ActiveModel::Validations
 
   validate :check_empty_job_param
+  validate :check_existing_profile
   validate :check_profile_email
   validate :check_published_job
   validate :check_empty_job_id
@@ -33,6 +34,14 @@ class CreateApplicantForm
       profile = find_or_create_profile(@profile_param)
       Applicant.create!(applicant_param.merge(profile_id: profile.id))
     end
+  end
+
+  def check_existing_profile
+    return if @applicant_param[:profile_id].blank?
+    
+    return if (Profile.find_by(id: @applicant_param[:profile_id]) || {}).present?
+
+    errors.add(:error, 'Profile not found.')
   end
 
   def find_or_create_profile(profile_param = {})
