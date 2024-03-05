@@ -38,7 +38,7 @@ class CreateApplicantForm
 
   def check_existing_profile
     return if @applicant_param[:profile_id].blank?
-    
+
     return if (Profile.find_by(id: @applicant_param[:profile_id]) || {}).present?
 
     errors.add(:error, 'Profile not found.')
@@ -57,7 +57,7 @@ class CreateApplicantForm
   def check_profile_email
     return if @applicant_param[:profile_id].present?
 
-    return if @profile_param[:email].blank?
+    return if @profile_param[:email].present?
 
     errors.add(:error, 'Profile email is required.')
   end
