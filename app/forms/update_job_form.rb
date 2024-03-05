@@ -1,6 +1,4 @@
 class UpdateJobForm
-  include ActiveModel::Model
-
   attr_reader :job
 
   def initialize(job:, params:)
