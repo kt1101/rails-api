@@ -1,4 +1,6 @@
 class UpdateJobForm
+  include ActiveModel::Validations
+
   attr_reader :job
 
   def initialize(job:, params:)
