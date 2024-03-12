@@ -31,8 +31,8 @@ class CreateApplicantForm
     if applicant_param[:profile_id].present? && Profile.find(applicant_param[:profile_id]).present?
       Applicant.create!(applicant_param)
     elsif @profile_param[:email].present?
-      profile = find_or_create_profile(@profile_param)
-      Applicant.create!(applicant_param.merge(profile_id: profile.id))
+      find_or_create_profile(@profile_param)
+      Applicant.create!(applicant_param.merge(profile_id: @profile.id))
     end
   end
 
@@ -45,7 +45,11 @@ class CreateApplicantForm
   end
 
   def find_or_create_profile(profile_param = {})
-    Profile.find_by(email: profile_param[:email]) || Profile.create!(profile_param)
+    @profile = Profile.find_by(email: profile_param[:email])
+    return if @profile.present?
+
+    @profile = Profile.create!(profile_param)
+    @profile.index!
   end
 
   def check_empty_job_param

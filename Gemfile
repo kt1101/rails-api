@@ -64,5 +64,7 @@ gem 'jsonapi-serializer'
 
 # Use rubocop for static code analysis
 gem 'rubocop', require: false
-
 gem 'rubocop-rails', require: false
+
+# MeiliSearch
+gem 'meilisearch-rails'

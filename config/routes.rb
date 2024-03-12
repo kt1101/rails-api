@@ -2,6 +2,11 @@ Rails.application.routes.draw do
   resources :applicants, only: [:index, :create, :update]
   resources :locations
   resources :users, only: [:show, :update]
+  resources :profiles, only: [:update] do
+    collection do
+      get :search
+    end
+  end
   resources :jobs, except: [:show] do
     member do
       get :share_link, to: 'jobs#share_link'
