@@ -6,7 +6,9 @@ class RejectApplicantService < ApplicationService
   private
 
   def update_status
-    @object[:applicant].update!(status: 'rejected')
-    ApplicantRejectedMailer.applicant_rejected_mailer(@object[:applicant]).deliver_later
+    return if @record[:applicant].rejected?
+
+    @record[:applicant].update!(status: 'rejected')
+    ApplicantRejectedMailer.applicant_rejected_mailer(@record[:applicant]).deliver_later
   end
 end

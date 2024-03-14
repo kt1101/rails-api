@@ -5,7 +5,6 @@ class AuthController < ApplicationController
 
   def signup
     @user = User.new(user_params)
-    @token = encode_token(user_id: @user.id)
     if @user.save
       render json: {
         user: UserSerializer.new(@user).serializable_hash
