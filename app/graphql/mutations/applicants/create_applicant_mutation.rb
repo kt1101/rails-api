@@ -13,7 +13,7 @@ module Mutations
           applicant: applicant_data.arguments.keyword_arguments,
           profile: profile_data.arguments.keyword_arguments
         }
-        create_applicant_form = CreateApplicantForm.new(params:)
+        create_applicant_form = ::CreateApplicantForm.new(params:)
         applicant = create_applicant_form.save
         { applicant: }
       end
