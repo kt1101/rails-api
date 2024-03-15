@@ -3,6 +3,9 @@ class ApplicationController < ActionController::API
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   before_action :authenticated
+  before_action do
+    ActiveStorage::Current.host = request.base_url
+  end
 
   def encode_token(id)
     payload = {
