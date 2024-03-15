@@ -68,3 +68,11 @@ gem 'rubocop-rails', require: false
 
 # MeiliSearch
 gem 'meilisearch-rails'
+
+# GraphQL
+gem 'graphiql-rails'
+gem 'graphql'
+gem 'sprockets-rails', '~> 3.4'
+
+# Apollo Upload Server
+gem 'apollo_upload_server', '2.1'

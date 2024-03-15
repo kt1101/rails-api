@@ -6,17 +6,18 @@ class JobPolicy < ApplicationPolicy
   end
 
   def update?
-    @user.id == @record.user_id
+    return true if owner?
+
+    raise Pundit::NotAuthorizedError
   end
 
   def destroy?
-    @user.id == @record.user_id
+    return true if owner?
+
+    raise Pundit::NotAuthorizedError
   end
 
-  class Scope < Scope
-    # NOTE: Be explicit about which records you allow access to!
-    # def resolve
-    #   scope.all
-    # end
+  def owner?
+    @user.id == @record.user_id
   end
 end
