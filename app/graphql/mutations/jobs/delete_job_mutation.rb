@@ -10,7 +10,8 @@ module Mutations
       def resolve(id:)
         job = Job.find(id)
         ::JobPolicy.new(context[:current_user, job]).destroy?
-        job.destroy
+        raise GraphQL::ExecutionError, job.errors.full_messages.join(', ') unless job.destroy
+
         { job: }
       end
     end

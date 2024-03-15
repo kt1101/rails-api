@@ -11,7 +11,7 @@ module Mutations
       def resolve(job_id:, job_data:)
         job = Job.find(job_id)
         ::JobPolicy.new(context[:current_user], job).update?
-        update_job = UpdateJobForm.new(job:, params: job_data.arguments.keyword_arguments)
+        update_job = ::UpdateJobForm.new(job:, params: job_data.arguments.keyword_arguments)
         unless update_job.update
           raise GraphQL::ExecutionError,
                 update_job.errors.full_messages.join(', ')
