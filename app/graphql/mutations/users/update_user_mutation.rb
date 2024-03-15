@@ -8,7 +8,7 @@ module Mutations
 
       field :user, Types::Fields::UserType, null: true
 
-      def resolve(avatar:)
+      def resolve(user:, avatar:)
         # user = context[:current_user]
         # user.assign_attributes(user_data.arguments.keyword_arguments)
         # user.avatar.attach(avatar) if avatar

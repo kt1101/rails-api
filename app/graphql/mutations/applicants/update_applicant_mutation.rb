@@ -10,7 +10,7 @@ module Mutations
 
       def resolve(applicant_id:)
         applicant = Applicant.find(applicant_id)
-        authorize(obj: applicant, ctx: context)
+        ::ApplicantPolicy.new(context[:current_user], applicant).update?
         reject_applicant_service = RejectApplicantService.new(applicant:)
         unless reject_applicant_service.call
           raise GraphQL::ExecutionError,

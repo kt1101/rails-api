@@ -1,5 +1,7 @@
 class ProfilePolicy < ApplicationPolicy
   def update?
-    @user.admin?
+    return true if @user.admin?
+
+    raise Pundit::NotAuthorizedError
   end
 end

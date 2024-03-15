@@ -6,6 +6,8 @@ class ApplicantPolicy < ApplicationPolicy
   end
 
   def update?
-    @user == @record.job.user
+    return true if @user == @record.job.user
+
+    raise Pundit::NotAuthorizedError
   end
 end

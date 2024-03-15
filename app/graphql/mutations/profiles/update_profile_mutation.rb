@@ -10,6 +10,7 @@ module Mutations
       def resolve(profile_data:)
         profile_args = profile_data.arguments.keyword_arguments
         profile = Profile.find(profile_args[:id])
+        ::ProfilePolicy.new(context[:current_user], profile).update?
         unless profile.update(profile_args)
           raise Graphql::ExecutionError, location.errros.full_messages.join(', ')
         end

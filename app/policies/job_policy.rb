@@ -6,25 +6,18 @@ class JobPolicy < ApplicationPolicy
   end
 
   def update?
-    return false if owner?
+    return true if owner?
 
-    raise Pundit::NotAuthorizedError, 'You are not authorized to perform this action.'
+    raise Pundit::NotAuthorizedError
   end
 
   def destroy?
-    return false if owner?
+    return true if owner?
 
     raise Pundit::NotAuthorizedError
   end
 
   def owner?
     @user.id == @record.user_id
-  end
-
-  class Scope < Scope
-    # NOTE: Be explicit about which records you allow access to!
-    # def resolve
-    #   scope.all
-    # end
   end
 end

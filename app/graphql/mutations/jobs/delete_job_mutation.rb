@@ -9,7 +9,7 @@ module Mutations
 
       def resolve(id:)
         job = Job.find(id)
-        authorize(obj: job, ctx: context)
+        ::JobPolicy.new(context[:current_user, job]).destroy?
         job.destroy
         { job: }
       end

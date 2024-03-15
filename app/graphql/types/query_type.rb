@@ -24,11 +24,28 @@ module Types
     # Add root-level fields here.
     # They will be entry points for queries on your schema.
 
-    # TODO: remove me
-    field :test_field, String, null: false,
-                               description: 'An example field added by the generator'
-    def test_field
-      'Hello World!'
+    # GET jobs
+    field :jobs, [Types::Fields::JobType], null: false
+    def jobs
+      context[:current_user].jobs
+    end
+
+    # GET applicants
+    field :applicants, [Types::Fields::ApplicantType], null: false
+    def applicants
+      Applicant.where(job_id: context[:current_user].jobs.pluck(:id))
+    end
+
+    # GET locations
+    field :locations, [Types::Fields::LocationType], null: false
+    def locations
+      Location.all
+    end
+
+    # GET user/1
+    field :user, Types::Fields::UserType, null: false
+    def user
+      context[:current_user] || []
     end
   end
 end
