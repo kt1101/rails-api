@@ -25,27 +25,15 @@ module Types
     # They will be entry points for queries on your schema.
 
     # GET jobs
-    field :jobs, [Types::Fields::JobType], null: false
-    def jobs
-      context[:current_user].jobs
-    end
+    include Types::Queries::JobQuery
 
     # GET applicants
-    field :applicants, [Types::Fields::ApplicantType], null: false
-    def applicants
-      Applicant.where(job_id: context[:current_user].jobs.pluck(:id))
-    end
+    include Types::Queries::ApplicantQuery
 
     # GET locations
-    field :locations, [Types::Fields::LocationType], null: false
-    def locations
-      Location.all
-    end
+    include Types::Queries::LocationQuery
 
     # GET user/1
-    field :user, Types::Fields::UserType, null: false
-    def user
-      context[:current_user] || []
-    end
+    include Types::Queries::UserQuery
   end
 end
